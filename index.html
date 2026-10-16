@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pul Kiritish va Qushlar O'yini</title>
+    <link rel="manifest" href="manifest.json"> <!-- Manifest faylini ulash -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #4CAF50;
+        }
+        .qush {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+        }
+        .qush img {
+            width: 100px; /* Qushlar rasm o'lchami */
+            margin-right: 15px;
+        }
+        .bought {
+            color: green;
+        }
+        .cash-point {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #e0ffe0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Pul Kiritish va Qushlar O'yini</h1>
+
+<div class="qush">
+    <img src="qush1.png" alt="1 Qush"> <!-- Qushlar rasm fayllarini qo'shing -->
+    <div>
+        <h2>1 Qush</h2>
+        <p>Narxi: 1000 so'm</p>
+        <p>Soatiga: 1000 sent</p>
+        <p>24 soatda: <span id="qush1"></span> so'm</p>
+        <button onclick="sotibOl(0)">Sotib olish</button>
+    </div>
+</div>
+
+<div class="qush">
+    <img src="qush2.png" alt="2 Qush">
+    <div>
+        <h2>2 Qush</h2>
+        <p>Narxi: 1500 so'm</p>
+        <p>Soatiga: 1000 sent</p>
+        <p>24 soatda: <span id="qush2"></span> so'm</p>
+        <button onclick="sotibOl(1)">Sotib olish</button>
+    </div>
+</div>
+
+<div class="qush">
+    <img src="qush3.png" alt="3 Qush">
+    <div>
+        <h2>3 Qush</h2>
+        <p>Narxi: 2500 so'm</p>
+        <p>Soatiga: 1000 sent</p>
+        <p>24 soatda: <span id="qush3"></span> so'm</p>
+        <button onclick="sotibOl(2)">Sotib olish</button>
+    </div>
+</div>
+
+<div class="qush">
+    <img src="qush4.png" alt="4 Qush">
+    <div>
+        <h2>4 Qush</h2>
+        <p>Narxi: 5000 so'm</p>
+        <p>Soatiga: 1000 sent</p>
+        <p>24 soatda: <span id="qush4"></span> so'm</p>
+        <button onclick="sotibOl(3)">Sotib olish</button>
+    </div>
+</div>
+
+<div class="qush">
+    <img src="qush5.png" alt="5 Qush">
+    <div>
+        <h2>5 Qush</h2>
+        <p>Narxi: 10,000 so'm</p>
+        <p>Soatiga: 1000 sent</p>
+        <p>24 soatda: <span id="qush5"></span> so'm</p>
+        <button onclick="sotibOl(4)">Sotib olish</button>
+    </div>
+</div>
+
+<h2>Pul Kiritish</h2>
+<input type="number" id="pulKiritish" placeholder="Pul miqdorini kiriting">
+<button onclick="pulKirit()">Kiritish</button>
+<p id="pulTogriKelishi"></p> <!-- Pul kiritishda to'g'ri kelishini ko'rsatish -->
+
+<h3>Hisob:</h3>
+<p>Hisobingiz: <span id="hisob">0</span> so'm</p>
+
+<div class="cash-point">
+    <h3>Cash Point</h3>
+    <p>Uyingizda cash point bor. 750,000 so'm tashlasangiz, pul chiqarishda muammo bo'lmaydi.</p>
+    <input type="number" id="pulChiqish" placeholder="Pulni chiqarish miqdori">
+    <button onclick="pulChiqish()">Pul chiqarish</button>
+</div>
+
+<p><a href="invite.html">Do'stlaringizni taklif qilish uchun havola</a></p> <!-- Do'stlarni taklif qilish havolasi -->
+
+<script>
+    // Qushlar uchun hisoblash
+    const soatigaSent = 1000; // Har bir qushning soatiga sentlari
+    const qushlar = [
+        { nomi: "1 Qush", narxi: 1000, sotilgan: false },
+        { nomi: "2 Qush", narxi: 1500, sotilgan: false },
+        { nomi: "3 Qush", narxi: 2500, sotilgan: false },
+        { nomi: "4 Qush", narxi: 5000, sotilgan: false },
+        { nomi: "5 Qush", narxi: 10000, sotilgan: false }
+    ];
+
+    qushlar.forEach((qush, index) => {
+        const pul24Soat = (soatigaSent / 100) * 24; // 24 soat davomida yig'iladigan pul
+        document.getElementById(`qush${index + 1}`).innerText = pul24Soat.toFixed(2);
+    });
+
+    // Hisob
+    let hisob = 0;
+
+    function pulKirit() {
+        let kiritilganPul = parseFloat(document.getElementById("pulKiritish").value);
+        if (!isNaN(kiritilganPul) && kiritilganPul > 0) {
+            hisob += kiritilganPul;
+            document.getElementById("hisob").innerText = hisob.toFixed(2);
+            document.getElementById("pulTogriKelishi").innerText = `${kiritilganPul} so'm ${kiritilganPul / 1000} tangaga to'g'ri keladi.`;
+            document.getElementById("pulKiritish").value = ''; // Input maydonini tozalash
+        } else {
+            alert("Iltimos, to'g'ri pul miqdorini kiriting!");
+        }
+    }
+
+    function sotibOl(index) {
+        if (qushlar[index].sotilgan) {
+            alert("Bu qush allaqachon sotib olingan!");
+            return;
+        }
+
+        if (hisob >= qushlar[index].narxi) {
+            hisob -= qushlar[index].narxi;
+            qushlar[index].sotilgan = true;
+            document.getElementById("hisob").innerText = hisob.toFixed(2);
+            alert(`${qushlar[index].nomi} muvaffaqiyatli sotib olindi!`);
+            document.querySelectorAll('.qush button')[index].disabled = true; // Tugmani o'chirish
+            document.querySelectorAll('.qush button')[index].innerText = "Sotib olingan";
+            document.querySelectorAll('.qush button')[index].classList.add('bought');
+        } else {
+            alert("Hisobingizda yetarli pul yo'q!");
+        }
+    }
+
+    function pulChiqish() {
+        let chiqadiganPul = parseFloat(document.getElementById("pulChiqish").value);
+        if (!isNaN(chiqadiganPul) && chiqadiganPul > 0 && chiqadiganPul <= hisob) {
+            hisob -= chiqadiganPul;
+            document.getElementById("hisob").innerText = hisob.toFixed(2);
+            alert(`${chiqadiganPul} so'm pul chiqarildi!`);
+            document.getElementById("pulChiqish").value = ''; // Input maydonini tozalash
+        } else {
+            alert("Hisobingizda yetarli pul yo'q yoki noto'g'ri miqdor kiritildi!");
+        }
+    }
+
+    // Service Worker ro'yxatdan o'tkazish
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('service-worker.js').then(function(registration) {
+                console.log('ServiceWorker registratsiya qilindi: ', registration);
+            }, function(err) {
+                console.log('ServiceWorker registratsiyasi muvaffaqiyatsiz: ', err);
+            });
+        });
+    }
+</script>
+
+</body>
+      </html>
+      
